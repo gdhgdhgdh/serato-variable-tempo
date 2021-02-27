@@ -1,0 +1,4 @@
+traktor-nml-utils
+numpy
+vamp
+librosa
