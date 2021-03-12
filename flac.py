@@ -40,8 +40,12 @@ def write_mp3(mp3file, beatgridfile):
 def gen_beatgrid(inputfile, outputfile):
     data, rate = librosa.load(inputfile, sr=None)
     params = {}
+#    tempo, beats = librosa.beat.beat_track(data, units='time', sr=rate)
     avg_tempo = librosa.beat.tempo(data)[0]
     beats = vamp.collect(data, rate, "qm-vamp-plugins:qm-barbeattracker")
+
+#    print(beats)
+#    exit()
 
     fp = open(outputfile, 'wb')
 
