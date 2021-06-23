@@ -6,7 +6,7 @@ I needed to move from Mixxx DJ to Serato and was really surprised that the BPM d
 
 Serato does have an 'Edit Grid' feature where you can manually set grid points, and I use this in conjunction with the [Queen Mary Vamp Plugins](https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html) that Mixxx uses already for variable tempo detection.
 
-This early work uses the output of the [Bar and Beat Tracker](https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html#qm-barbeattracker) to insert a grid point on the first beat of each detected bar.
+This early work uses the output of the [Bar and Beat Tracker](https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html#qm-barbeattracker) to insert a grid point every eight beats (Serato only supports 128 markers per track!)
 
 ## Usage
 
