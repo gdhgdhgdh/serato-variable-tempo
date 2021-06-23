@@ -10,7 +10,7 @@ def determine_filetype(inputfile):
     audio = mutagen.File(inputfile)
     return audio.mime[0]
 
-def write_flac(flacfile, beatgridfile):
+def write_flac(flacfile, beatgridfile, avg_tempo):
     audio = mutagen.File(flacfile)
     print(audio)
 
@@ -20,15 +20,20 @@ def write_flac(flacfile, beatgridfile):
 
     beatgrid = b'application/octet-stream' + b'\x00\x00' + b'Serato BeatGrid' + b'\x00' + beatgrid
     audio["SERATO_BEATGRID"] = textwrap.fill(base64.b64encode(beatgrid).decode('ascii'), width=72)
+    audio["bpm"] = str(avg_tempo)
     audio.save()
 
-def write_mp3(mp3file, beatgridfile):
+def write_mp3(mp3file, beatgridfile, avg_tempo):
     audio = mutagen.id3.ID3(mp3file)
 
     beatgrid_fp = open(beatgridfile, 'rb')
     beatgrid = beatgrid_fp.read()
     beatgrid_fp.close()
 
+    audio['TBPM'] = mutagen.id3.TBPM(
+        encoding=0,
+        text=str(avg_tempo),
+    )
     audio['GEOB:Serato BeatGrid'] = mutagen.id3.GEOB(
         encoding=0,
         mime='application/octet-stream',
@@ -78,21 +83,22 @@ def gen_beatgrid(inputfile, outputfile):
     fp.write(struct.pack('>f', avg_tempo))
     fp.write(b'\x37')
     print(len(beats['list']))
+    return avg_tempo
 
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file', metavar='INFILE', help="the audio file to generate a variable beatgrid for")
 parser.add_argument('beatgrid_file', metavar='BGFILE', help="the binary file to write the Serato BeatGrid to")
 args = parser.parse_args()
 
-gen_beatgrid(args.input_file, args.beatgrid_file)
+avg_tempo = gen_beatgrid(args.input_file, args.beatgrid_file)
 
 filetype = determine_filetype(args.input_file)
 
 print(filetype)
 
 if filetype == 'audio/flac':
-    write_flac(args.input_file, args.beatgrid_file)
+    write_flac(args.input_file, args.beatgrid_file, int(avg_tempo))
 elif filetype == 'audio/mp3':
-    write_mp3(args.input_file, args.beatgrid_file)
+    write_mp3(args.input_file, args.beatgrid_file, int(avg_tempo))
 else:
     print(f'Sorry, {filetype} files are not supported')

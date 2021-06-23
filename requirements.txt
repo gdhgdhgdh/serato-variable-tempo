@@ -1,4 +1,4 @@
-traktor-nml-utils
 numpy
+mutagen
 vamp
 librosa
