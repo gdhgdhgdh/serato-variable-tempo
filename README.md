@@ -16,8 +16,14 @@ You'll need `ffmpeg` installed if you want to read anything other than uncompres
 $ python3 -mvenv .venv
 $ source .venv/bin/activate
 $ pip install -r requirements.txt
-$ python serato_beatgrid.py /path/to/input/file.mp3 /path/to/beatgrid.dat 
+$ python serato_beatgrid.py /path/to/input/file.mp3 /tmp/beatgrid.dat 
 ```
+
+This will work for MP3 and FLAC files since those are the two types I tend to use.
+
+## Old Stuff
+
+You can also use the `serato_beatgrid_old.py` to generate only a standalone beatgrid file. It will not update any MP3 or ID3 tags in the source audio file.
 
 Once you have the `beatgrid.dat` output file, you'll want to add it as metadata to your original track. I've only tried MP3 files so far, and here's how I do it. You'll need to install the `eyeD3` tool since it's by far the most comprehensive ID3 tag editor available.
 
